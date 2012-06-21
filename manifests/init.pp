@@ -10,7 +10,29 @@
 #
 # Sample Usage:
 #
-class monitoringutils {
-
-
+class monitoringutils($scriptpath = '/usr/local/scripts') {
+  file { $scriptpath:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+  }
+  file { 'fsck-ro.sh':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    path    => $scriptpath,
+    source  => 'puppet:///monitoringutils/fsck-ro.sh',
+    require => File[$scriptpath],
+  }
+  file { 'fsck-ro.rb':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    path    => $scriptpath,
+    source  => 'puppet:///monitoringutils/fsck-ro.rb',
+    require => File[$scriptpath],
+  }
 }
