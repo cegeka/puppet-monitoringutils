@@ -1,4 +1,8 @@
 #!/usr/bin/ruby
+#
+# Local variables
+error = 0
+
 # Check for root priv blkid won't run without
 uid = Process.uid
 if uid != 0
@@ -16,9 +20,13 @@ blkid.each { |device|
       return_value = %x[touch -a #{mountpoint}]
       result = $?.to_i
       if result > 0
-        puts "Sorry: there is something wrong with #{mountpoint}"
-        exit 1
+        error = 1
+        puts "fsck: there is something wrong with #{mountpoint}"
       end
     end 
   end
 }
+if error == 1
+  puts "Sorry: there is something wrong with one or more filesystems"
+  exit 1
+end
