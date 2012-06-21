@@ -25,4 +25,12 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     source  => 'puppet:///monitoringutils/fsck-ro.sh',
     require => File[$scriptpath],
   }
+  file { 'fsck-ro.rb':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    source  => 'puppet:///monitoringutils/fsck-ro.rb',
+    require => File[$scriptpath],
+  }
 }
