@@ -1,14 +1,12 @@
 # Class: monitoringutils
 #
 # This module manages monitoringutils
-#
-# Parameters:
-#
-# Actions:
-#
-# Requires:
+# include it to install handy monitoring like scripts
 #
 # Sample Usage:
+# class { 'monitoringutils':
+#    scriptpath => '/usr/local/scripts',
+# }
 #
 class monitoringutils($scriptpath = '/usr/local/scripts') {
   file { $scriptpath:
@@ -17,22 +15,20 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     group  => 'root',
     mode   => '0644',
   }
-  file { 'fsck-ro.sh':
+  file { "${scriptpath}/fsck-ro.sh":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
-    path    => "${scriptpath}/${name}",
-    source  => "puppet:///${module_name}/${name}",
+    source  => "puppet:///modules/${module_name}/fsck-ro.sh",
     require => File[$scriptpath],
   }
-  file { 'fsck-ro.rb':
+  file { "${scriptpath}/fsck-ro.rb":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
-    path    => "${scriptpath}/${name}",
-    source  => "puppet:///${module_name}/${name}",
+    source  => "puppet:///modules/${module_name}/fsck-ro.rb",
     require => File[$scriptpath],
   }
 }
