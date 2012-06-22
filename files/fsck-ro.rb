@@ -26,7 +26,10 @@ blkid.each { |device|
     end 
   end
 }
-if error == 1
-  puts "Sorry: there is something wrong with one or more filesystems"
+if error >= 1
+  puts "Filesystem readonly-health test result: FAILED"
   exit 1
+else
+  puts "Filesystem readonly-health test result: PASSED"
+  exit 0
 end
