@@ -1,1 +1,3 @@
-include monitoringutils
+class { 'monitoringutils':
+  scriptpath => '/usr/local/scripts',
+}
