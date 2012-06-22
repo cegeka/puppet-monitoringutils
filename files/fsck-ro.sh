@@ -24,6 +24,9 @@ for device in ${blkid}; do
 done
 
 if [[ ${error} == 1 ]]; then
-  printf "Sorry: there is something wrong with one or more filesystems\n"
+  printf "Filesystem readonly-health test result: FAILED\n"
   exit 1
+else
+  printf "Filesystem readonly-health test result: PASSED\n"
+  exit 0
 fi
