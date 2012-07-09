@@ -10,13 +10,6 @@
 #
 class monitoringutils($scriptpath = '/usr/local/scripts') {
 
-  @file { $scriptpath:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-  }
-
   @file { 'fsck-ro.sh':
     ensure  => present,
     path    => "${scriptpath}/fsck-ro.sh",
