@@ -17,7 +17,7 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     mode   => '0644',
   }
 
-  file { "${scriptpath}/fsck-ro.sh":
+  @file { "${scriptpath}/fsck-ro.sh":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
@@ -26,7 +26,7 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     require => File[$scriptpath],
   }
 
-  file { "${scriptpath}/fsck-ro.rb":
+  @file { "${scriptpath}/fsck-ro.rb":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
@@ -35,7 +35,7 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     require => File[$scriptpath],
   }
 
-  file { "${scriptpath}/appserver-threads-mon.sh":
+  @file { "${scriptpath}/appserver-threads-mon.sh":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
@@ -44,7 +44,7 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     require => File[$scriptpath],
   }
 
-  file { "${scriptpath}/scriptura-threads-mon.sh":
+  @file { "${scriptpath}/scriptura-threads-mon.sh":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
