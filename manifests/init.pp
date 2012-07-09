@@ -10,7 +10,7 @@
 #
 class monitoringutils($scriptpath = '/usr/local/scripts') {
 
-  file { $scriptpath:
+  @file { $scriptpath:
     ensure => directory,
     owner  => 'root',
     group  => 'root',
