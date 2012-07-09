@@ -9,12 +9,14 @@
 # }
 #
 class monitoringutils($scriptpath = '/usr/local/scripts') {
+
   file { $scriptpath:
     ensure => directory,
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
   }
+
   file { "${scriptpath}/fsck-ro.sh":
     ensure  => present,
     owner   => 'root',
@@ -23,6 +25,7 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     source  => "puppet:///modules/${module_name}/fsck-ro.sh",
     require => File[$scriptpath],
   }
+
   file { "${scriptpath}/fsck-ro.rb":
     ensure  => present,
     owner   => 'root',
@@ -31,4 +34,23 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     source  => "puppet:///modules/${module_name}/fsck-ro.rb",
     require => File[$scriptpath],
   }
+
+  file { "${scriptpath}/appserver-threads-mon.sh":
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    source  => "puppet:///modules/${module_name}/appserver-threads-mon.sh",
+    require => File[$scriptpath],
+  }
+
+  file { "${scriptpath}/scriptura-threads-mon.sh":
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    source  => "puppet:///modules/${module_name}/scriptura-threads-mon.sh",
+    require => File[$scriptpath],
+  }
+
 }
