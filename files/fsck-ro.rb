@@ -1,7 +1,8 @@
 #!/usr/bin/ruby
-#
+
 # Local variables
 error = 0
+failed_mountpoints = []
 
 # Check for root priv blkid won't run without
 uid = Process.uid
@@ -21,15 +22,15 @@ blkid.each { |device|
       result = $?.to_i
       if result > 0
         error = 1
-        puts "fsck: there is something wrong with #{mountpoint}"
-      end
-    end 
+        failed_mountpoints << mountpoint
+			end
+    end
   end
 }
+
 if error >= 1
-  puts "Filesystem readonly-health test result: FAILED"
+  puts "Filesystem readonly-health tests FAILED for the following filesystems: #{failed_mountpoints.join(' ')}"
   exit 1
 else
-  puts "Filesystem readonly-health test result: PASSED"
   exit 0
 end

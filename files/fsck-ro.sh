@@ -1,7 +1,8 @@
 #!/bin/sh
-#
+
 # Local variables
 error=0
+failed_mountpoints=()
 
 # Check for root priv blkid won't run without
 if [[ $(id -u) -ne 0 ]]; then
@@ -18,15 +19,14 @@ for device in ${blkid}; do
     result=$?
     if [[ $result -gt 0 ]]; then
       error=1
-      printf "Sorry: there is something wrong with ${mountpoint}\n"
+      failed_mountpoints=( "${failed_mountpoints[*]}" "${mountpoint}" )
     fi
   fi
 done
 
 if [[ ${error} == 1 ]]; then
-  printf "Filesystem readonly-health test result: FAILED\n"
+  printf "Filesystem readonly-health tests FAILED for the following filesystems: ${failed_mountpoints[*]} \n"
   exit 1
 else
-  printf "Filesystem readonly-health test result: PASSED\n"
   exit 0
 fi
