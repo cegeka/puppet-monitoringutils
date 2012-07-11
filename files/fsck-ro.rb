@@ -2,7 +2,6 @@
 
 # Local variables
 error = 0
-passed_mountpoints = []
 failed_mountpoints = []
 
 # Check for root priv blkid won't run without
@@ -24,8 +23,6 @@ blkid.each { |device|
       if result > 0
         error = 1
         failed_mountpoints << mountpoint
-      else
-				passed_mountpoints << mountpoint
 			end
     end
   end
@@ -35,6 +32,5 @@ if error >= 1
   puts "Filesystem readonly-health tests FAILED for the following filesystems: #{failed_mountpoints.join(' ')}"
   exit 1
 else
-  puts "Filesystem readonly-health tests PASSED for the following filesystems: #{passed_mountpoints.join(' ')}"
   exit 0
 end

@@ -2,7 +2,6 @@
 
 # Local variables
 error=0
-passed_mountpoints=()
 failed_mountpoints=()
 
 # Check for root priv blkid won't run without
@@ -21,8 +20,6 @@ for device in ${blkid}; do
     if [[ $result -gt 0 ]]; then
       error=1
       failed_mountpoints=( "${failed_mountpoints[*]}" "${mountpoint}" )
-    else
-      passed_mountpoints=( "${passed_mountpoints[*]}" "${mountpoint}" )
     fi
   fi
 done
@@ -31,6 +28,5 @@ if [[ ${error} == 1 ]]; then
   printf "Filesystem readonly-health tests FAILED for the following filesystems: ${failed_mountpoints[*]} \n"
   exit 1
 else
-  printf "Filesystem readonly-health tests PASSED for the following filesystems: ${passed_mountpoints[*]} \n"
   exit 0
 fi
