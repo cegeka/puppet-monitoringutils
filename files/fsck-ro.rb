@@ -1,36 +1,29 @@
 #!/usr/bin/ruby
 
 # Local variables
-error = 0
+devices = []
 failed_mountpoints = []
+fstypes = [ 'ext3', 'ext4' ]
 
 # Check for root priv blkid won't run without
-uid = Process.uid
-if uid != 0
-  puts "Sorry: Root must run this script"
-  exit 1
-end
+abort "Sorry: root must run this script" if Process.uid != 0
 
 # Get EXT devices
-blkid = %x[blkid -o device]
-blkid = blkid.split
+blkid = fstypes.each { |type|
+  devices + %x[blkid -o device -t TYPE=#{type}].split
+}
+
 blkid.each { |device|
-  mountpoint = %x[grep #{device} /proc/mounts].split[1]
+  mountpoint = %x[mount | grep \"^#{device} \"].split[2]
   unless mountpoint.nil?
     if Dir[mountpoint]
       return_value = %x[touch -a #{mountpoint}]
       result = $?.to_i
       if result > 0
-        error = 1
         failed_mountpoints << mountpoint
-			end
+      end
     end
   end
 }
 
-if error >= 1
-  puts "Filesystem readonly-health tests FAILED for the following filesystems: #{failed_mountpoints.join(' ')}"
-  exit 1
-else
-  exit 0
-end
+abort "Filesystem readonly healthcheck FAILED for the following filesystems: #{failed_mountpoints.join(' ')}" if ! failed_mountpoints.empty?
