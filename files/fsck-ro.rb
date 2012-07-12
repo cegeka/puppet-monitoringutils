@@ -1,14 +1,18 @@
 #!/usr/bin/ruby
 
 # Local variables
+devices = []
 failed_mountpoints = []
+fstypes = [ 'ext3', 'ext4' ]
 
 # Check for root priv blkid won't run without
 abort "Sorry: root must run this script" if Process.uid != 0
 
 # Get EXT devices
-blkid = %x[blkid -o device]
-blkid = blkid.split
+blkid = fstypes.each { |type|
+  devices + %x[blkid -o device -t TYPE=#{type}].split
+}
+
 blkid.each { |device|
   mountpoint = %x[mount | grep \"^#{device} \"].split[2]
   unless mountpoint.nil?
