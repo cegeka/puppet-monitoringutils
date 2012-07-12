@@ -15,7 +15,7 @@ end
 blkid = %x[blkid -o device]
 blkid = blkid.split
 blkid.each { |device|
-  mountpoint = %x[grep #{device} /proc/mounts].split[1]
+  mountpoint = %x[mount | grep \"^#{device} \"].split[2]
   unless mountpoint.nil?
     if Dir[mountpoint]
       return_value = %x[touch -a #{mountpoint}]
@@ -23,7 +23,7 @@ blkid.each { |device|
       if result > 0
         error = 1
         failed_mountpoints << mountpoint
-			end
+      end
     end
   end
 }
