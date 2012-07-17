@@ -1,29 +1,51 @@
 #!/usr/bin/ruby
 
+# Configuration
+FSTYPES = [ 'ext3', 'ext4' ]
+
 # Local variables
-devices = []
-failed_mountpoints = []
-fstypes = [ 'ext3', 'ext4' ]
+failed_mounts = []
 
-# Check for root priv blkid won't run without
-abort "Sorry: root must run this script" if Process.uid != 0
+class FSEntry
 
-# Get EXT devices
-blkid = fstypes.each { |type|
-  devices + %x[blkid -o device -t TYPE=#{type}].split
-}
+  attr_reader :device
+  attr_reader :mountpoint
+  attr_reader :fstype
+  attr_reader :options
+  attr_reader :dump
+  attr_reader :pass
 
-blkid.each { |device|
-  mountpoint = %x[mount | grep \"^#{device} \"].split[2]
-  unless mountpoint.nil?
-    if Dir[mountpoint]
-      return_value = %x[touch -a #{mountpoint}]
-      result = $?.to_i
-      if result > 0
-        failed_mountpoints << mountpoint
+  def initialize(line)
+    array = line.split(%r{\s+})
+
+    @device = array[0]
+    @mountpoint = array[1]
+    @fstype = array[2]
+    @options = array[3].split(',')
+    @dump = array[4]
+    @pass = array[5]
+  end
+end
+
+def get_ro_mounts(file)
+  ro_array = []
+
+  File.foreach(file) do |line|
+    # skip comments
+    next if line =~ /^\s*#/
+    # parse line if it's not empty
+    fsentry = FSEntry.new(line) unless line =~ /^$/
+
+    if FSTYPES.include?(fsentry.fstype)
+      if fsentry.options.include?('ro')
+        ro_array << fsentry.mountpoint
       end
     end
   end
-}
 
-abort "Filesystem readonly healthcheck FAILED for the following filesystems: #{failed_mountpoints.join(' ')}" if ! failed_mountpoints.empty?
+  return ro_array
+end
+
+failed_mounts = get_ro_mounts('/proc/mounts') - get_ro_mounts('/etc/fstab')
+
+abort "Filesystem readonly check FAILED for: #{failed_mounts.join(' ')}" if ! failed_mounts.empty?
