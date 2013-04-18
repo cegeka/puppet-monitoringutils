@@ -16,14 +16,18 @@ class FSEntry
   attr_reader :pass
 
   def initialize(line)
-    array = line.split(%r{\s+})
+    fsentry = line.split(%r{\s+})
 
-    @device = array[0]
-    @mountpoint = array[1]
-    @fstype = array[2]
-    @options = array[3].split(',')
-    @dump = array[4]
-    @pass = array[5]
+    @device = fsentry[0]
+    @mountpoint = fsentry[1]
+    @fstype = fsentry[2]
+    @options = fsentry[3].split(',')
+    @dump = fsentry[4]
+    @pass = fsentry[5]
+  end
+
+  def ro?
+    @options.include?('ro')
   end
 end
 
@@ -32,18 +36,16 @@ def get_ro_mounts(file)
 
   File.foreach(file) do |line|
     # skip comments and empty lines
-    next if line =~ /^\s*#/ or line =~ /^\s*$/
+    next if line =~ /^\s*(#.*|)$/
 
     fsentry = FSEntry.new(line)
 
     if FSTYPES.include?(fsentry.fstype)
-      if fsentry.options.include?('ro')
-        ro_array << fsentry.mountpoint
-      end
+      ro_array << fsentry.mountpoint if fsentry.ro?
     end
   end
 
-  return ro_array
+  ro_array
 end
 
 failed_mounts = get_ro_mounts('/proc/mounts') - get_ro_mounts('/etc/fstab')
