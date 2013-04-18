@@ -10,16 +10,6 @@
 #
 class monitoringutils($scriptpath = '/usr/local/scripts') {
 
-  @file { 'fsck-ro.sh':
-    ensure  => present,
-    path    => "${scriptpath}/fsck-ro.sh",
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0700',
-    source  => "puppet:///modules/${module_name}/fsck-ro.sh",
-    require => File[$scriptpath],
-  }
-
   @file { 'fsck-ro.rb':
     ensure  => present,
     path    => "${scriptpath}/fsck-ro.rb",
