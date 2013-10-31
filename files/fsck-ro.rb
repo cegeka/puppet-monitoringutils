@@ -31,10 +31,10 @@ def get_ro_mounts(file)
   ro_array = []
 
   File.foreach(file) do |line|
-    # skip comments
-    next if line =~ /^\s*#/
-    # parse line if it's not empty
-    fsentry = FSEntry.new(line) unless line =~ /^$/
+    # skip comments and empty lines
+    next if line =~ /^\s*#/ or line =~ /^\s*$/
+
+    fsentry = FSEntry.new(line)
 
     if FSTYPES.include?(fsentry.fstype)
       if fsentry.options.include?('ro')
