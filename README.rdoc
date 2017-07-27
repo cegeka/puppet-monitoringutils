@@ -1,5 +1,5 @@
 = puppet-monitoringutils module
 
-{<img src='https://codex.cegeka.be/jenkins/job/puppet-monitoringutils/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-monitoringutils/]
+{<img src='https://jenkins-iac.cegeka.be/job/puppet-monitoringutils/badge/icon' />}[https://jenkins-iac.cegeka.be/job/puppet-monitoringutils/]
 
 This is the monitoringutils module.
