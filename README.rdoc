@@ -3,3 +3,4 @@
 {<img src='https://jenkins-iac.cegeka.be/job/puppet-monitoringutils/badge/icon' />}[https://jenkins-iac.cegeka.be/job/puppet-monitoringutils/]
 
 This is the monitoringutils module.
+
