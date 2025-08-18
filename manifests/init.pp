@@ -40,4 +40,14 @@ class monitoringutils($scriptpath = '/usr/local/scripts') {
     require => File[$scriptpath],
   }
 
+  @file { 'activemq-failover-mon.sh':
+    ensure  => present,
+    path    => "${scriptpath}/activemq-failover-mon.sh",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    source  => "puppet:///modules/${module_name}/activemq-failover-mon.sh",
+    require => File[$scriptpath],
+  }
+
 }
